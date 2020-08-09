@@ -11,14 +11,15 @@ public class generateTerrain : MonoBehaviour
 
 
     public const int cube_side_length = 500;
+    public const int circle_radius = 200;
 
 
     // Start is called before the first frame update
     void Start()
     {
 
-        GenerateMap_Crater_Cube_Tiled(cube_side_length);
-        SetAustronaut2Surface(cube_side_length);
+        //GenerateMap_Crater_Cube_Tiled(cube_side_length);
+        GenerateMap_Crater_Circle_Tiled(circle_radius);
 
     }
 
@@ -29,17 +30,41 @@ public class generateTerrain : MonoBehaviour
     }
 
     //Generates the planet as a cube with craters on the surface
-    void SetAustronaut2Surface(int side_length)
+    void GenerateMap_Crater_Circle_Tiled(int radius)
     {
 
+        //Position and Tile Array for later TileMap Population
+        Vector3Int[] positions = new Vector3Int[radius * 2 * radius * 2];
+        TileBase[] tileArray = new TileBase[positions.Length];
+        int tbi = 0;
 
+        int i = 0;
+
+        int bounding_box = circle_radius;
+        for (int x = -bounding_box; x < bounding_box; x++)
+        {
+            for (int y = -bounding_box; y < bounding_box; y++)
+            {
+                float dist_to_core = Mathf.Pow(x,2) + Mathf.Pow(y,2);
+                if (dist_to_core <= Mathf.Pow(circle_radius,2))
+                {
+                    positions[tbi] = new Vector3Int(x, y, 0);
+                    tileArray[tbi] = ground;
+                    tbi++;
+                }
+            }
+            i++;
+        }
+        lunar.SetTiles(positions, tileArray);
 
     }
 
-        //Generates the planet as a cube with craters on the surface
-        void GenerateMap_Crater_Cube_Tiled(int side_length)
+
+    //Generates the planet as a cube with craters on the surface
+    void GenerateMap_Crater_Cube_Tiled(int side_length)
     {
 
+        //Position and Tile Array for later TileMap Population
         Vector3Int[] positions = new Vector3Int[side_length * side_length];
         TileBase[] tileArray = new TileBase[positions.Length];
         int tbi = 0;

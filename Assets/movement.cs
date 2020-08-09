@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class movement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     // Config
     public float walkingForce = 0.25f;
     public float speed = 5;
-    public float jumpForce = 8;
+    public float jumpForce = 100;
+    public float jetpackForce = 1;
     public float boost_speed = 20;
 
     //Variables
     Rigidbody2D rb;
+    public Gravity g;
     public SpriteRenderer sr;
     public Sprite yellow_rowling;
     public Sprite yellow_normal;
@@ -23,6 +25,7 @@ public class movement : MonoBehaviour
     public LayerMask groundLayer;
 
     private int rolling_status = 0;
+    private float current_movement;
 
     // Start is called before the first frame update
     void Start()
@@ -43,19 +46,35 @@ public class movement : MonoBehaviour
     void Move()
     {
         float x = Input.GetAxisRaw("Horizontal");
+
+        //Normal walking
+        if (isGrounded)
+        {
+            Vector2 walk_right = Vector2.Perpendicular(g.gravityDirection);
+            Vector2 walk_left = Vector2.Perpendicular(g.gravityDirection) * -1;
+            rb.velocity = walk_right * x * speed;
+
+        }
+
+
+
         float moveByX = x * speed;
         float moveByX_boost = x * boost_speed;
-        rb.velocity = new Vector2(moveByX, rb.velocity.y);
+        float velocity_x = moveByX;
 
+
+
+        // Begin Rolling cycle
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             rolling_status = 50;
             sr.sprite = yellow_rowling;
         }
 
+        // Apply Boost and Rotation if rolling
         if (rolling_status > 0)
         {
-            rb.velocity = new Vector2(moveByX_boost, rb.velocity.y);
+            velocity_x = moveByX_boost;
             rolling_status--;
 
             if(moveByX_boost > 0)
@@ -70,44 +89,37 @@ public class movement : MonoBehaviour
 
         }
 
+        //Update Sprite at the end of rolling
         if (sr.sprite == yellow_rowling && rolling_status == 0)
         {
             sr.sprite = yellow_normal;
         }
+
 
     }
 
     void Rotate()
     {
 
-        //if (Input.GetKey(KeyCode.Q))
-        //{
-        //    rb.transform.Rotate(0, 0, 1, Space.Self);
-        //}
-
-        //if (Input.GetKey(KeyCode.E))
-        //{
-        //    rb.transform.Rotate(0, 0, -1, Space.Self);
-        //}
-
-        if(rolling_status == 0)
-            rb.transform.rotation = new Quaternion(0, 0, 0, 0);
+        //if(rolling_status == 0)
+        //    rb.transform.rotation = new Quaternion(0, 0, 0, 0);
 
     }
 
     void Jump()
     {
+        //If grounded jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + jumpForce);
-        } else if (isGrounded && (rb.velocity.x != 0))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + walkingForce);
-        } else if (Input.GetKey(KeyCode.Space) && !isGrounded && rb.velocity.y <= jumpForce / 5)
-        {
-           rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + jumpForce / 20);
-           sr.sprite = yellow_burst;
+           rb.AddForce (g.gravityDirection * -jumpForce);
 
+        //If not grounded start jetpack
+        } else if (Input.GetKey(KeyCode.Space) && !isGrounded)
+        {
+            rb.velocity = rb.velocity + g.gravityDirection * -jetpackForce;
+            sr.sprite = yellow_burst;
+
+        //Stop jetpack
         } else if (!Input.GetKey(KeyCode.Space) && sr.sprite == yellow_burst)
         {
             sr.sprite = yellow_normal;
@@ -116,7 +128,7 @@ public class movement : MonoBehaviour
 
     }
 
-    void CheckIfGrounded()
+    public bool CheckIfGrounded()
     {
         Collider2D collider = Physics2D.OverlapCircle(isGroundedChecker.position, checkGroundRadius, groundLayer);
         if (collider != null)
@@ -127,5 +139,6 @@ public class movement : MonoBehaviour
         {
             isGrounded = false;
         }
+        return isGrounded;
     }
 }

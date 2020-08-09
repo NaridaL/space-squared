@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f547462962e4b1b95116ce2208af39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 632885747}
+  target: {fileID: 632885748}
   freedomFactor: 5
 --- !u!20 &519420031
 Camera:
@@ -363,6 +363,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &632885746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632885744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39cec1e58f8b042bea33d57f5e5fe3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextPlanet: {fileID: 1940137874}
+  sfo: {fileID: 632885748}
 --- !u!4 &632885747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4183386415708824, guid: c1bee09c88207064ca42d6ebc274c572,
@@ -384,7 +398,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
