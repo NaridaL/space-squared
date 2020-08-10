@@ -377,6 +377,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextPlanet: {fileID: 1940137874}
   sfo: {fileID: 632885748}
+  gravityDirection: {x: 0, y: 0}
+  gravityForce: {x: 0, y: 0}
 --- !u!4 &632885747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4183386415708824, guid: c1bee09c88207064ca42d6ebc274c572,
@@ -445,7 +447,9 @@ MonoBehaviour:
   walkingForce: 0.25
   speed: 4
   jumpForce: 8
+  jetpackForce: 1
   boost_speed: 30
+  g: {fileID: 632885746}
   sr: {fileID: 632885745}
   yellow_rowling: {fileID: 21300000, guid: 5e09c465240f445d995c3361d64f63d5, type: 3}
   yellow_normal: {fileID: 21300000, guid: c8175bca879964085b53c1606478ec2f, type: 3}

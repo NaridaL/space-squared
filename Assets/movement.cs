@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     // Config
     public float walkingForce = 0.25f;
     public float speed = 5;
-    public float jumpForce = 100;
+    public float jumpForce = ;
     public float jetpackForce = 1;
     public float boost_speed = 20;
 
@@ -111,7 +111,7 @@ public class Movement : MonoBehaviour
         //If grounded jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-           rb.AddForce (g.gravityDirection * -jumpForce);
+            rb.velocity = rb.velocity + g.gravityDirection * -jumpForce;
 
         //If not grounded start jetpack
         } else if (Input.GetKey(KeyCode.Space) && !isGrounded)
